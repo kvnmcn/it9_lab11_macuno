@@ -15,7 +15,7 @@ class PostController extends Controller
     {
         //
         $posts = Post::all();
-        return view('posts.index', compact('posts'));
+        return view('tasks.index', compact('posts'));
     }
 
     /**
