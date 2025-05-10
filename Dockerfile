@@ -1,6 +1,17 @@
 FROM richarvey/nginx-php-fpm:1.7.2
 
-COPY . .
+# Install necessary PHP extensions
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo_mysql mbstring bcmath
+
+# Copy application files
+COPY . /var/www/html
 
 # Image config
 ENV SKIP_COMPOSER 1
@@ -17,4 +28,5 @@ ENV LOG_CHANNEL stderr
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+# Nginx & PHP-FPM settings
 CMD ["/start.sh"]
